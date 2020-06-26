@@ -1,0 +1,123 @@
+<html>
+  <head>
+    <!-- Compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <title>Vieja qla</title>
+  </head>
+  <body>
+    <div
+      class="valign-wrapper"
+      style="width: 100%; height: 100%; position: absolute;"
+    >
+      <div class="container center-aligned" style="background-color: azure;">
+        <div class="row">
+          <div class="input-field col s6">
+            <input
+              placeholder="Escribe el texto a traducir"
+              id="text"
+              type="text"
+            />
+            <label for="text">Texto a traducir</label>
+          </div>
+          <div class="input-field col s6">
+            <button
+              class="waves-effect waves-light btn"
+              id="trButton"
+              onclick="getTranslatedText()"
+            >
+              Traducir
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <textarea
+            disabled
+            id="translatedText"
+            class="materialize-textarea"
+          ></textarea>
+          <label for="translatedText">Texto traducido a vieja qla</label>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    function getTranslatedText() {
+      const typos = {
+        v: ['b'],
+        b: ['v'],
+        s: ['z'],
+        ci: ['si'],
+        ce: ['se'],
+        co: ['ko'],
+        se: ['ce'],
+        si: ['ci'],
+        qu: ['k'],
+        ct: ['st'],
+        á: ['a', 'à'],
+        é: ['e', 'è'],
+        í: ['i', 'ì'],
+        ó: ['o', 'ò'],
+        ú: ['u', 'ù'],
+        x: ['c'],
+        m: ['n'],
+        n: ['m'],
+      };
+
+      const dictionary = {
+        muy: ['mui'],
+        cierto: ['sierto'],
+        hola: ['ola'],
+        pizza: ['picsa', 'pitza'],
+      };
+
+      const randomNumber = (times) => Math.floor(Math.random() * times);
+      const yesOrNo = () => Boolean(randomNumber(2));
+      const dots = () => (yesOrNo() ? '.'.repeat(randomNumber(3)) : '');
+      const commas = () => (yesOrNo() ? ','.repeat(randomNumber(7)) : '');
+      const spaces = () => ' '.repeat(randomNumber(3));
+
+      const text = document.getElementById('text').value;
+      var textArray = text.toLowerCase().split` `;
+      var translatedArray = textArray.map((word) => {
+        if (typeof dictionary[word] !== 'undefined') {
+          return yesOrNo()
+            ? dictionary[word][randomNumber(dictionary[word].length)] || word
+            : word;
+        } else {
+          return word;
+        }
+      });
+
+      var badTypingArray = translatedArray.map((word) => {
+        Object.keys(typos).forEach(
+          (typo) =>
+            (word = yesOrNo()
+              ? word.replace(
+                  typo,
+                  typos[typo][randomNumber(typos[typo].length)]
+                )
+              : word)
+        );
+        return word;
+      });
+      var finalTranslatedText = badTypingArray.map(
+        (word) => `${word}${dots()}${commas()}${spaces()}`
+      ).join``;
+
+      document.getElementById('translatedText').value = finalTranslatedText;
+    }
+  </script>
+  <style>
+      body {
+          background-image: url('piolin.jpg');
+          background-size: cover;
+      }
+  </style>
+</html>
